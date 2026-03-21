@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///C:/Users/57264419/Desktop/15/barber.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Black Barber - Paysandú</title>
+  <link href="./Black Barber - Paysandú_files/css2" rel="stylesheet">
+  <script src="./Black Barber - Paysandú_files/email.min.js.descarga"></script>
+  <style>
+    :root {
+      --accent: #0b6623;
+      --accent-light: #1a8c32;
+      --bg: #0a0a0a;
+      --bg2: #111;
+      --card: #161616;
+      --border: rgba(255,255,255,0.06);
+      --success: #22c45e;
+      --busy: #3a3a3a;
+      --text: #f0f0f0;
+      --muted: #888;
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── PORTADA ─────────────────────────────────────── */
+    #landing {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      z-index: 100;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    #landing.fade-out {
+      opacity: 0;
+      transform: translateY(-30px);
+      pointer-events: none;
+    }
+
+    .landing-inner {
+      text-align: center;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scissors-icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+      display: block;
+      opacity: 0.6;
+      animation: fadeUp 0.9s 0.1s ease both;
+    }
+
+    .brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 14vw, 120px);
+      letter-spacing: 6px;
+      line-height: 1;
+      background: linear-gradient(180deg, #ffffff 0%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 0.9s 0.15s ease both;
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+      margin-bottom: 48px;
+      animation: fadeUp 0.9s 0.25s ease both;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(11,102,35,0.35);
+      animation: fadeUp 0.9s 0.35s ease both;
+    }
+    .btn-cta:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 0 45px rgba(11,102,35,0.5);
+    }
+    .btn-cta:active { transform: scale(0.97); }
+
+    .divider-line {
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 40px auto 0;
+      animation: fadeUp 0.9s 0.4s ease both;
+    }
+
+    /* ─── APP (oculto al inicio) ───────────────────────── */
+    #app {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+      pointer-events: none;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    #app.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .app-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 4px;
+      color: var(--text);
+    }
+
+    .app-sub {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ─── STEPS ────────────────────────────────────────── */
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    /* Step indicator */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--busy);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted);
+      transition: background 0.3s, color 0.3s;
+    }
+    .step-dot.done { background: var(--accent); color: #fff; }
+    .step-dot.active { background: var(--accent-light); color: #fff; box-shadow: 0 0 12px rgba(34,196,94,0.4); }
+    .step-line {
+      width: 60px; height: 2px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .step-line.done { background: var(--accent); }
+
+    /* ─── SERVICIOS ─────────────────────────────────────── */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .service {
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      font-weight: 500;
+    }
+    .service:hover { background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+    .service.selected {
+      border-color: var(--success);
+      background: rgba(34,196,94,0.08);
+      color: var(--success);
+    }
+
+    .service-icon { font-size: 24px; margin-bottom: 6px; }
+
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus { border-color: var(--accent); }
+
+    label.field-label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* ─── GRID CALENDAR + TIMES ──────────────────────────── */
+    .booking-grid {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media(max-width: 700px) {
+      .booking-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Calendar */
+    .calendar-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .cal-nav-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .cal-nav-btn:hover { background: rgba(255,255,255,0.1); }
+
+    .cal-month {
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: capitalize;
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .cal-wd {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 4px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 4px;
+    }
+
+    .cal-cell {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      position: relative;
+    }
+    .cal-cell:hover:not(.inactive):not(.selected) {
+      background: rgba(255,255,255,0.07);
+      transform: scale(1.05);
+    }
+    .cal-cell.inactive { opacity: 0.2; cursor: default; pointer-events: none; }
+    .cal-cell.has-slots::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    .cal-cell.selected {
+      background: var(--accent);
+      border-color: var(--accent-light);
+      color: #fff;
+      font-weight: 600;
+    }
+    .cal-cell.today {
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* Times */
+    .times-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .times-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .times-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      overflow-y: auto;
+      max-height: 320px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .time-slot {
+      padding: 10px 8px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* DISPONIBLE = VERDE */
+    .time-slot.available {
+      background: rgba(34,196,94,0.12);
+      border-color: rgba(34,196,94,0.3);
+      color: var(--success);
+    }
+    .time-slot.available:hover {
+      background: rgba(34,196,94,0.22);
+      transform: scale(1.04);
+      box-shadow: 0 0 12px rgba(34,196,94,0.25);
+    }
+    .time-slot.available.selected {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+      box-shadow: 0 0 16px rgba(34,196,94,0.4);
+    }
+
+    /* OCUPADO = GRIS */
+    .time-slot.busy {
+      background: var(--busy);
+      border-color: rgba(255,255,255,0.04);
+      color: #555;
+      cursor: not-allowed;
+    }
+    .time-slot.busy::after {
+      content: '✕';
+      position: absolute;
+      top: 3px; right: 6px;
+      font-size: 9px;
+      color: #444;
+    }
+
+    .no-date-msg {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin: auto;
+      padding: 20px 0;
+    }
+
+    /* ─── FORM ──────────────────────────────────────────── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media(max-width:500px) { .form-row { grid-template-columns:1fr; } }
+
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: var(--accent); }
+
+    .pay-options {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .pay-opt {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .pay-opt.selected {
+      border-color: var(--success);
+      background: rgba(34,196,94,0.08);
+      color: var(--success);
+    }
+    .pay-opt input { display: none; }
+
+    /* ─── FOOTER BUTTONS ─────────────────────────────────── */
+    .footer-btns {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 11px 22px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: #fff; color: #fff; }
+
+    /* ─── CONFIRM ────────────────────────────────────────── */
+    .confirm-box {
+      background: rgba(34,196,94,0.06);
+      border: 1px solid rgba(34,196,94,0.2);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 14px;
+    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-row span:first-child { color: var(--muted); }
+    .confirm-row span:last-child { font-weight: 600; }
+
+    .success-icon {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ LANDING ═══════════════ -->
+  <div id="landing">
+    <div class="landing-inner">
+      <span class="scissors-icon">✂</span>
+      <div class="brand">Black Barber</div>
+      <div class="brand-sub">Paysandú · Est. 2026</div>
+      <button class="btn-cta" id="startBtn">
+        Reservar turno
+        <span>→</span>
+      </button>
+      <div class="divider-line"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ APP ════════════════════ -->
+  <div id="app">
+    <div class="app-header">
+      <div class="app-logo">BLACK BARBER</div>
+      <div class="app-sub">Paysandú — Reserva tu turno</div>
+    </div>
+
+    <div class="container">
+
+      <!-- Step bar -->
+      <div class="steps-bar">
+        <div class="step-dot active" id="sd1">1</div>
+        <div class="step-line" id="sl1"></div>
+        <div class="step-dot" id="sd2">2</div>
+        <div class="step-line" id="sl2"></div>
+        <div class="step-dot" id="sd3">3</div>
+      </div>
+
+      <!-- STEP 1: Servicio -->
+      <div id="step1" class="section active">
+        <div class="card">
+          <h3>Elegí tu servicio</h3>
+          <div class="services" id="services">
+            <div class="service" data-service="corte">
+              <div class="service-icon">💈</div>Corte
+            </div>
+            <div class="service" data-service="barba">
+              <div class="service-icon">🪒</div>Barba
+            </div>
+            <div class="service" data-service="mechas">
+              <div class="service-icon">✨</div>Mechas
+            </div>
+            <div class="service" data-service="combo">
+              <div class="service-icon">⚡</div>Combo
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px">
+            <label class="field-label">Elegir peluquero</label>
+            <select id="barberSelect">
+              <option value="martin">Martín</option>
+              <option value="lucas">Lucas</option>
+              <option value="ale">Alejandro</option>
+            </select>
+          </div>
+
+          <div style="text-align:right">
+            <button class="btn-cta" id="toCalendar">Continuar →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Fecha y hora -->
+      <div id="step2" class="section">
+        <div class="card">
+          <h3>Elegí día y hora</h3>
+
+          <div class="booking-grid">
+            <!-- Calendario -->
+            <div class="calendar-card">
+              <div class="cal-nav">
+                <button class="cal-nav-btn" id="prevMonth">◀</button>
+                <div class="cal-month" id="monthLabel">Marzo 2026</div>
+                <button class="cal-nav-btn" id="nextMonth">▶</button>
+              </div>
+              <div class="cal-weekdays">
+                <div class="cal-wd">D</div>
+                <div class="cal-wd">L</div>
+                <div class="cal-wd">M</div>
+                <div class="cal-wd">X</div>
+                <div class="cal-wd">J</div>
+                <div class="cal-wd">V</div>
+                <div class="cal-wd">S</div>
+              </div>
+              <div class="cal-grid" id="calGrid"><div class="cal-cell inactive">1</div><div class="cal-cell inactive">2</div><div class="cal-cell inactive">3</div><div class="cal-cell inactive">4</div><div class="cal-cell inactive">5</div><div class="cal-cell inactive">6</div><div class="cal-cell inactive">7</div><div class="cal-cell inactive">8</div><div class="cal-cell inactive">9</div><div class="cal-cell inactive">10</div><div class="cal-cell inactive">11</div><div class="cal-cell inactive">12</div><div class="cal-cell inactive">13</div><div class="cal-cell inactive">14</div><div class="cal-cell inactive">15</div><div class="cal-cell inactive">16</div><div class="cal-cell inactive">17</div><div class="cal-cell inactive">18</div><div class="cal-cell inactive">19</div><div class="cal-cell inactive">20</div><div class="cal-cell today has-slots">21</div><div class="cal-cell has-slots">22</div><div class="cal-cell has-slots">23</div><div class="cal-cell has-slots">24</div><div class="cal-cell has-slots">25</div><div class="cal-cell has-slots">26</div><div class="cal-cell has-slots">27</div><div class="cal-cell has-slots">28</div><div class="cal-cell has-slots">29</div><div class="cal-cell has-slots">30</div><div class="cal-cell has-slots">31</div></div>
+            </div>
+
+            <!-- Horarios -->
+            <div class="times-card">
+              <div class="times-label" id="timesLabel">Seleccioná un día</div>
+              <div class="times-list" id="timesList">
+                <div class="no-date-msg">← Elegí una fecha para ver los horarios</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Datos del cliente -->
+          <div class="form-row">
+            <div>
+              <label class="field-label">Nombre</label>
+              <input type="text" id="name" placeholder="Ej: Juan">
+            </div>
+            <div>
+              <label class="field-label">Apellido</label>
+              <input type="text" id="surname" placeholder="Ej: González">
+            </div>
+          </div>
+          <div style="margin-bottom:16px">
+            <label class="field-label">Teléfono</label>
+            <input type="tel" id="phone" placeholder="Ej: 099 000 000" style="max-width:260px">
+          </div>
+          <div>
+            <label class="field-label">Forma de pago</label>
+            <div class="pay-options">
+              <label class="pay-opt selected" id="payLocal">
+                <input type="radio" name="pay" value="local" checked="">
+                💵 Pagar en local
+              </label>
+              <label class="pay-opt" id="payOnline">
+                <input type="radio" name="pay" value="online">
+                💳 Pagar online
+              </label>
+            </div>
+          </div>
+
+          <div class="footer-btns">
+            <button class="btn-back" id="backToServices">← Volver</button>
+            <button class="btn-cta" id="reserveBtn">Confirmar reserva →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Confirmación -->
+      <div id="step3" class="section">
+        <div class="card" style="text-align:center">
+          <div class="success-icon">🎉</div>
+          <h3 style="text-align:center;margin-bottom:20px">¡Turno reservado!</h3>
+          <div class="confirm-box" id="confirmBox"></div>
+          <button class="btn-cta" id="doneBtn">Nueva reserva</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════════════
+    // ── CONFIGURACIÓN EMAILJS ─────────────────────────────────
+  
+    const EMAILJS_PUBLIC_KEY  = 'ddndnGjF_-hXm0FEZ';
+    const EMAILJS_SERVICE_ID  = 'service_cas6sww';
+    const EMAILJS_TEMPLATE_ID = 'template_aarz1zp';
+    const PELUQUERO_EMAIL     = 'nicolasparente115@gmail.com';
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    async function enviarEmailPeluquero(datos) {
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email:     PELUQUERO_EMAIL,
+          client_name:  datos.nombre + ' ' + datos.apellido,
+          client_phone: datos.telefono,
+          service:      datos.servicio,
+          barber:       datos.peluquero,
+          date:         datos.fecha,
+          time:         datos.hora,
+          payment:      datos.pago,
+        });
+        console.log('Email enviado al peluquero');
+      } catch (err) {
+        // Si falla el email, la reserva igual se guarda normalmente
+        console.warn('No se pudo enviar el email (revisá la config de EmailJS):', err);
+      }
+    }
+    // ══════════════════════════════════════════════════════════
+
+    // ── Reservas simuladas (día-hora ocupados) ──────────────
+    const bookedSlots = {};
+
+    function slotKey(dateStr, time) { return dateStr + '_' + time; }
+    function isBooked(dateStr, time) { return !!bookedSlots[slotKey(dateStr, time)]; }
+    function bookSlot(dateStr, time) { bookedSlots[slotKey(dateStr, time)] = true; }
+
+    // ── Generar horarios 8:00–19:00 cada 45min ───────────────
+    function generateTimes() {
+      const times = [];
+      let h = 8, m = 0;
+      while (h < 19 || (h === 19 && m === 0)) {
+        times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+        m += 45;
+        if (m >= 60) { h += Math.floor(m/60); m = m % 60; }
+      }
+      return times;
+    }
+    const ALL_TIMES = generateTimes();
+
+    // ── Estado ────────────────────────────────────────────────
+    let selectedService = null;
+    let selectedDate    = null;
+    let selectedTime    = null;
+    let currentYear, currentMonth;
+
+    const now = new Date();
+    currentYear  = now.getFullYear();
+    currentMonth = now.getMonth();
+
+    // ── Landing → App ─────────────────────────────────────────
+    document.getElementById('startBtn').addEventListener('click', () => {
+      document.getElementById('landing').classList.add('fade-out');
+      setTimeout(() => {
+        document.getElementById('landing').style.display = 'none';
+        document.getElementById('app').classList.add('visible');
+      }, 600);
+    });
+
+    // ── Servicios ─────────────────────────────────────────────
+    document.querySelectorAll('.service').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.service').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedService = el.dataset.service;
+      });
+    });
+
+    // ── Pago ──────────────────────────────────────────────────
+    document.querySelectorAll('.pay-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+
+    // ── Navegación de pasos ───────────────────────────────────
+    function showStep(n) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + n).classList.add('active');
+
+      ['sd1','sd2','sd3'].forEach((id, i) => {
+        const dot = document.getElementById(id);
+        dot.classList.remove('active','done');
+        if (i + 1 < n) dot.classList.add('done');
+        if (i + 1 === n) dot.classList.add('active');
+      });
+      ['sl1','sl2'].forEach((id, i) => {
+        const line = document.getElementById(id);
+        line.classList.toggle('done', i + 1 < n);
+      });
+    }
+
+    document.getElementById('toCalendar').addEventListener('click', () => {
+      if (!selectedService) { alert('Por favor elegí un servicio primero.'); return; }
+      showStep(2);
+      renderCalendar();
+    });
+
+    document.getElementById('backToServices').addEventListener('click', () => showStep(1));
+
+    document.getElementById('reserveBtn').addEventListener('click', () => {
+      const name    = document.getElementById('name').value.trim();
+      const surname = document.getElementById('surname').value.trim();
+      const phone   = document.getElementById('phone').value.trim();
+      const pay     = document.querySelector('.pay-opt.selected input').value;
+      const barber  = document.getElementById('barberSelect');
+      const barberName = barber.options[barber.selectedIndex].text;
+
+      if (!selectedDate)    { alert('Seleccioná una fecha.'); return; }
+      if (!selectedTime)    { alert('Seleccioná un horario.'); return; }
+      if (!name || !phone)  { alert('Completá nombre y teléfono.'); return; }
+
+      // Guardar la reserva
+      bookSlot(selectedDate, selectedTime);
+
+      // Enviar email al peluquero
+      const dateDisp = new Date(selectedDate + 'T12:00:00').toLocaleDateString('es-UY', { weekday:'long', day:'numeric', month:'long' });
+      enviarEmailPeluquero({
+        nombre:    name,
+        apellido:  surname,
+        telefono:  phone,
+        servicio:  capitalize(selectedService),
+        peluquero: barberName,
+        fecha:     capitalize(dateDisp),
+        hora:      selectedTime,
+        pago:      pay === 'local' ? 'En local' : 'Online',
+      });
+
+      // Mostrar confirmación
+      document.getElementById('confirmBox').innerHTML = `
+        <div class="confirm-row"><span>Servicio</span><span>${capitalize(selectedService)}</span></div>
+        <div class="confirm-row"><span>Peluquero</span><span>${barberName}</span></div>
+        <div class="confirm-row"><span>Fecha</span><span>${capitalize(dateDisp)}</span></div>
+        <div class="confirm-row"><span>Hora</span><span>${selectedTime}</span></div>
+        <div class="confirm-row"><span>Cliente</span><span>${name} ${surname}</span></div>
+        <div class="confirm-row"><span>Teléfono</span><span>${phone}</span></div>
+        <div class="confirm-row"><span>Pago</span><span>${pay === 'local' ? 'En local' : 'Online'}</span></div>
+      `;
+      showStep(3);
+    });
+
+    document.getElementById('doneBtn').addEventListener('click', () => {
+      selectedDate = null; selectedTime = null; selectedService = null;
+      document.querySelectorAll('.service').forEach(s => s.classList.remove('selected'));
+      document.getElementById('name').value = '';
+      document.getElementById('surname').value = '';
+      document.getElementById('phone').value = '';
+      showStep(1);
+    });
+
+    // ── Calendario ────────────────────────────────────────────
+    document.getElementById('prevMonth').addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderCalendar();
+    });
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar();
+    });
+
+    function renderCalendar() {
+      const grid = document.getElementById('calGrid');
+      const label = document.getElementById('monthLabel');
+      grid.innerHTML = '';
+
+      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                      'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      label.textContent = `${months[currentMonth]} ${currentYear}`;
+
+      const today = new Date(); today.setHours(0,0,0,0);
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      // Blanks
+      for (let i = 0; i < firstDay; i++) {
+        const blank = document.createElement('div');
+        blank.className = 'cal-cell inactive';
+        grid.appendChild(blank);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        const date = new Date(currentYear, currentMonth, d);
+        date.setHours(0,0,0,0);
+        const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+
+        cell.className = 'cal-cell';
+        cell.textContent = d;
+
+        if (date < today) {
+          cell.classList.add('inactive');
+        } else {
+          if (date.getTime() === today.getTime()) cell.classList.add('today');
+          cell.classList.add('has-slots');
+          if (selectedDate === dateStr) cell.classList.add('selected');
+
+          cell.addEventListener('click', () => {
+            selectedDate = dateStr;
+            selectedTime = null;
+            renderCalendar();
+            renderTimes(dateStr);
+          });
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    // ── Horarios ──────────────────────────────────────────────
+    function renderTimes(dateStr) {
+      const list  = document.getElementById('timesList');
+      const label = document.getElementById('timesLabel');
+      const d = new Date(dateStr + 'T12:00:00').toLocaleDateString('es-UY', { weekday:'long', day:'numeric', month:'short' });
+      label.textContent = capitalize(d);
+      list.innerHTML = '';
+
+      ALL_TIMES.forEach(t => {
+        const slot = document.createElement('div');
+        slot.className = 'time-slot';
+        slot.textContent = t;
+
+        if (isBooked(dateStr, t)) {
+          slot.classList.add('busy');
+          slot.title = 'Turno ocupado';
+        } else {
+          slot.classList.add('available');
+          if (selectedTime === t) slot.classList.add('selected');
+          slot.addEventListener('click', () => {
+            selectedTime = t;
+            renderTimes(dateStr);
+          });
+        }
+        list.appendChild(slot);
+      });
+    }
+
+    function capitalize(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    // ── Init ──────────────────────────────────────────────────
+    renderCalendar();
+  </script>
+
+</body></html>
